@@ -5,7 +5,7 @@ import { api } from '../../services/api';
 import { MedicalRecord } from '../../types';
 import { COLORS } from '../../theme/colors';
 
-export default function MedicalRecordsScreen(){
+export default function MedicalRecordsScreen({ navigation }: any){
   const [data, setData] = useState<MedicalRecord[]>([]);
   useEffect(()=>{ api.getRecords().then(setData); },[]);
   return (
@@ -13,14 +13,15 @@ export default function MedicalRecordsScreen(){
       <View style={styles.header}><Text style={styles.kicker}>YOUR HEALTH HISTORY</Text><Text style={styles.title}>Medical Records</Text><Text style={styles.sub}>Everything important, organized in one place.</Text></View>
       <FlatList data={data} keyExtractor={i=>i.id} contentContainerStyle={{ padding:16 }}
         renderItem={({item})=>(
-          <View style={styles.card}>
+          <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('RecordDetail', { record: item })} activeOpacity={0.8}>
             <View style={styles.iconBox}><Text style={styles.iconText}>{item.type === 'lab' ? 'L' : item.type === 'prescription' ? 'Rx' : item.type === 'imaging' ? 'I' : 'N'}</Text></View>
             <View style={{ flex:1 }}>
               <Text style={styles.cardTitle}>{item.title}</Text>
               <Text style={styles.cardSub}>{item.doctor} • {item.date}</Text>
             </View>
             <Text style={styles.badge}>{item.type}</Text>
-          </View>
+            <Text style={styles.chevron}>›</Text>
+          </TouchableOpacity>
         )}
       />
       <TouchableOpacity style={styles.upload}><Text style={styles.uploadText}>+ Upload Report</Text></TouchableOpacity>
@@ -39,6 +40,7 @@ const styles = StyleSheet.create({
   cardTitle:{ fontWeight:'800', color:COLORS.text },
   cardSub:{ color:COLORS.textMuted, fontSize:12, marginTop:2 },
   badge:{ fontSize:10, backgroundColor:'#F1F5F9', paddingHorizontal:8, paddingVertical:4, borderRadius:6, textTransform:'uppercase' },
+  chevron:{ color:COLORS.primary, fontSize:24, marginLeft:8 },
   upload:{ backgroundColor:COLORS.primaryLight, borderWidth:1, borderColor:'#B9E3E8', borderStyle:'dashed', borderRadius:16, padding:17, margin:16, alignItems:'center' },
   uploadText:{ color:COLORS.primary, fontWeight:'700' }
 });

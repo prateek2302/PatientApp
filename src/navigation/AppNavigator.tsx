@@ -11,6 +11,7 @@ import AppointmentsScreen from '../screens/Appointments/AppointmentsScreen';
 import BookAppointmentScreen from '../screens/Appointments/BookAppointmentScreen';
 import MedicalRecordsScreen from '../screens/Records/MedicalRecordsScreen';
 import ProfileScreen from '../screens/Profile/ProfileScreen';
+import RecordDetailScreen from '../screens/Records/RecordDetailScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { COLORS } from '../theme/colors';
 
@@ -59,6 +60,7 @@ export default function AppNavigator(){
       <Stack.Screen name="Register" component={RegisterScreen} />
       <Stack.Screen name="MainTabs" component={MainTabs} />
       <Stack.Screen name="BookAppointment" component={BookAppointmentScreen} options={{ headerShown:true, title:'Book Appointment'}} />
+      <Stack.Screen name="RecordDetail" component={RecordDetailScreen} options={{ headerShown: true, title: 'Record Preview' }} />
     </Stack.Navigator>
   );
 }
