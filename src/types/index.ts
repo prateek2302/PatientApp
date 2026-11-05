@@ -8,6 +8,10 @@ export type Patient = {
   avatar: string;
 };
 
+export type User = Patient & {
+  email: string;
+};
+
 export type Appointment = {
   id: string;
   doctorName: string;

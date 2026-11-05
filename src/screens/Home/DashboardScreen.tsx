@@ -3,22 +3,27 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { COLORS } from '../../theme/colors';
 import { api } from '../../services/api';
-import { Vital, Appointment } from '../../types';
+import { User, Vital, Appointment } from '../../types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import VitalChart from '../../components/VitalChart';
 import AppointmentCard from '../../components/AppointmentCard';
 
 export default function DashboardScreen({ navigation }: any){
   const [vitals, setVitals] = useState<Vital[]>([]);
   const [appts, setAppts] = useState<Appointment[]>([]);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(()=>{
+    AsyncStorage.getItem('user').then(value => {
+      if (value) setUser(JSON.parse(value) as User);
+    }).catch(error => console.warn('Unable to load the patient profile.', error));
     api.getVitals().then(setVitals);
     api.getAppointments().then(a=> setAppts(a.filter(x=> x.status==='upcoming')));
   },[]);
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ padding:20, paddingBottom:40 }}>
-      <View style={styles.topBar}><View><Text style={styles.kicker}>THURSDAY, NOVEMBER 5</Text><Text style={styles.greeting}>Good evening, Aarav</Text></View><View style={styles.avatar}><Text style={styles.avatarText}>AS</Text></View></View>
+      <View style={styles.topBar}><View><Text style={styles.kicker}>THURSDAY, NOVEMBER 5</Text><Text style={styles.greeting}>Good evening, {user?.name.split(' ')[0] || 'there'}</Text></View><View style={styles.avatar}><Text style={styles.avatarText}>{user?.avatar || '—'}</Text></View></View>
       <Text style={styles.sub}>Here's your health summary today</Text>
       <View style={styles.wellness}><View><Text style={styles.wellnessKicker}>TODAY'S WELLNESS</Text><Text style={styles.wellnessTitle}>Small steps, big impact.</Text><Text style={styles.wellnessSub}>Keep taking care of yourself.</Text></View><Text style={styles.wellnessMark}>✦</Text></View>
 

@@ -1,26 +1,33 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { COLORS } from '../../theme/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { User } from '../../types';
 
 export default function ProfileScreen({ navigation }: any){
+  const [user, setUser] = useState<User | null>(null);
+  useEffect(() => {
+    AsyncStorage.getItem('user').then(value => {
+      if (value) setUser(JSON.parse(value) as User);
+    }).catch(error => console.warn('Unable to load the patient profile.', error));
+  }, []);
   const logout = async () => {
     await AsyncStorage.clear();
     navigation.replace('Login');
   };
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ padding:20 }}>
-      <View style={styles.hero}><View style={styles.avatar}><Text style={styles.avatarText}>AS</Text></View><Text style={styles.verified}>✓ VERIFIED PROFILE</Text></View>
-      <Text style={styles.name}>Aarav Sharma</Text>
-      <Text style={styles.email}>aarav.sharma@email.com • 28y • O+</Text>
+      <View style={styles.hero}><View style={styles.avatar}><Text style={styles.avatarText}>{user?.avatar || '—'}</Text></View><Text style={styles.verified}>✓ VERIFIED PROFILE</Text></View>
+      <Text style={styles.name}>{user?.name || 'Patient'}</Text>
+      <Text style={styles.email}>{user?.email || 'Loading profile...'} • {user?.age || '—'}y • {user?.bloodGroup || '—'}</Text>
       <Text style={styles.section}>Personal details</Text>
 
       <View style={styles.card}>
-        <Row label="Patient ID" value="P-2026-00142" />
-        <Row label="Blood Group" value="O+ Positive" />
-        <Row label="Allergies" value="Penicillin, Dust" />
-        <Row label="Emergency Contact" value="+91 98765 43210" />
+        <Row label="Patient ID" value={user ? `P-2026-${user.id.padStart(5, '0')}` : '—'} />
+        <Row label="Blood Group" value={user?.bloodGroup || '—'} />
+        <Row label="Gender" value={user?.gender || '—'} />
+        <Row label="Emergency Contact" value="Available in records" />
       </View>
 
       <TouchableOpacity style={styles.btn}><Text style={styles.btnText}>Edit Profile</Text></TouchableOpacity>

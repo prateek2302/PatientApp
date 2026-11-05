@@ -68,7 +68,10 @@ npm run android
 ## Project Usage
 
 1. Launch the app on an iOS simulator, Android emulator, or connected device.
-2. Authenticate through the sign-in flow.
+2. Authenticate through the sign-in flow. The demo accounts below are available:
+   - `aarav.sharma@email.com` / `demo123`
+   - `meera.iyer@email.com` / `demo123`
+   - `kabir.khan@email.com` / `demo123`
 3. Use the dashboard to navigate to appointments, records, vitals, and profile information.
 
 ## Platform Notes

@@ -8,6 +8,11 @@ export default function LoginScreen({ navigation }: any){
   const [email, setEmail] = useState('patient@demo.com');
   const [password, setPassword] = useState('demo123');
   const { login, loading } = useAuth();
+  const demoPatients = [
+    { name: 'Aarav Sharma', email: 'aarav.sharma@email.com' },
+    { name: 'Meera Iyer', email: 'meera.iyer@email.com' },
+    { name: 'Kabir Khan', email: 'kabir.khan@email.com' },
+  ];
 
   const handleLogin = async () => {
     const normalizedEmail = email.trim();
@@ -52,6 +57,23 @@ export default function LoginScreen({ navigation }: any){
           <TouchableOpacity style={styles.btn} onPress={handleLogin} disabled={loading}>
             <Text style={styles.btnText}>{loading ? 'Signing in...' : 'Sign In  →'}</Text>
           </TouchableOpacity>
+          <Text style={styles.demoTitle}>Try a demo patient</Text>
+          <Text style={styles.demoHint}>All demo accounts use password: demo123</Text>
+          <View style={styles.demoList}>
+            {demoPatients.map(patient => (
+              <TouchableOpacity
+                key={patient.email}
+                style={styles.demoBtn}
+                onPress={() => {
+                  setEmail(patient.email);
+                  setPassword('demo123');
+                }}
+              >
+                <Text style={styles.demoName}>{patient.name}</Text>
+                <Text style={styles.demoEmail}>{patient.email}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
           <View style={styles.divider}><View style={styles.line} /><Text style={styles.or}>or</Text><View style={styles.line} /></View>
           <TouchableOpacity onPress={()=> navigation.navigate('Register')} style={styles.secondaryBtn}>
             <Text style={styles.secondaryText}>Create a new account</Text>
@@ -86,6 +108,12 @@ const styles = StyleSheet.create({
   forgot:{ alignSelf:'flex-end', marginTop:10 },
   btn:{ backgroundColor:COLORS.primary, borderRadius:14, padding:16, marginTop:22, alignItems:'center', flexDirection:'row', justifyContent:'center', gap:10 },
   btnText:{ color:'#fff', fontWeight:'800', fontSize:16 },
+  demoTitle:{ color:COLORS.text, fontWeight:'800', fontSize:14, marginTop:22 },
+  demoHint:{ color:COLORS.textMuted, fontSize:12, marginTop:4 },
+  demoList:{ gap:8, marginTop:10 },
+  demoBtn:{ borderWidth:1, borderColor:'#D9E7EE', borderRadius:12, padding:11, backgroundColor:'#F8FCFD' },
+  demoName:{ color:COLORS.primary, fontWeight:'800' },
+  demoEmail:{ color:COLORS.textMuted, fontSize:11, marginTop:2 },
   divider:{ flexDirection:'row', alignItems:'center', marginVertical:20 },
   line:{ flex:1, height:1, backgroundColor:COLORS.border },
   or:{ color:COLORS.textMuted, marginHorizontal:12, fontSize:12 },

@@ -1,15 +1,56 @@
 
-import { Appointment, MedicalRecord, Vital } from '../types';
+import { Appointment, MedicalRecord, User, Vital } from '../types';
 
 const delay = (ms:number) => new Promise(r=>setTimeout(r, ms));
 
+const patients: Array<User & { password: string }> = [
+  {
+    id: '1',
+    name: 'Aarav Sharma',
+    age: 28,
+    gender: 'Male',
+    bloodGroup: 'O+',
+    avatar: 'AS',
+    email: 'aarav.sharma@email.com',
+    password: 'demo123',
+  },
+  {
+    id: '2',
+    name: 'Meera Iyer',
+    age: 35,
+    gender: 'Female',
+    bloodGroup: 'A+',
+    avatar: 'MI',
+    email: 'meera.iyer@email.com',
+    password: 'demo123',
+  },
+  {
+    id: '3',
+    name: 'Kabir Khan',
+    age: 42,
+    gender: 'Male',
+    bloodGroup: 'B+',
+    avatar: 'KK',
+    email: 'kabir.khan@email.com',
+    password: 'demo123',
+  },
+];
+
+const publicPatient = ({ password: _password, ...patient }: User & { password: string }): User => patient;
+
 export const api = {
-  async login(email:string, password:string){
+  async login(email:string, password:string): Promise<{ token: string; user: User }> {
     await delay(800);
     if (!email.trim() || !password) {
       throw new Error('Email and password are required.');
     }
-    return { token: 'mock-token', user: { id:'1', name:'Aarav Sharma', email } };
+    const patient = patients.find(
+      account => account.email.toLowerCase() === email.trim().toLowerCase() && account.password === password,
+    );
+    if (!patient) {
+      throw new Error('Invalid email or password. Try one of the demo patients below.');
+    }
+    return { token: `mock-token-${patient.id}`, user: publicPatient(patient) };
   },
   async getAppointments(): Promise<Appointment[]>{
     await delay(500);
