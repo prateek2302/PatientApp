@@ -30,6 +30,19 @@ export default function LoginScreen({ navigation }: any){
     }
   };
 
+  const handleForgotPassword = () => {
+    const normalizedEmail = email.trim();
+    if (!normalizedEmail) {
+      Alert.alert('Enter your email', 'Enter your email address first so we can send reset instructions.');
+      return;
+    }
+
+    Alert.alert(
+      'Reset instructions sent',
+      `For this demo, use password "demo123" to sign in to ${normalizedEmail}.`,
+    );
+  };
+
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
@@ -53,7 +66,9 @@ export default function LoginScreen({ navigation }: any){
           <View style={styles.inputWrap}>
             <TextInput style={styles.input} value={password} onChangeText={setPassword} secureTextEntry placeholder="Enter your password" placeholderTextColor="#94A3B8" />
           </View>
-          <TouchableOpacity style={styles.forgot}><Text style={styles.link}>Forgot password?</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.forgot} onPress={handleForgotPassword}>
+            <Text style={styles.link}>Forgot password?</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.btn} onPress={handleLogin} disabled={loading}>
             <Text style={styles.btnText}>{loading ? 'Signing in...' : 'Sign In  →'}</Text>
           </TouchableOpacity>
