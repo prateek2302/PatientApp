@@ -2,6 +2,8 @@
 
 PatientApp is a React Native mobile application for patients to manage their healthcare information and activities from one place. It provides authentication, a dashboard, appointments, medical records, vital tracking, and profile management.
 
+
+
 ## Features
 
 - **Authentication** — Sign in and manage access to the application.
